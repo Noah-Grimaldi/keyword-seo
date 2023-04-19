@@ -4,6 +4,8 @@
 
 **INSTALLATION** - You can either download the source code above (main.py) or you can download the executable [here](https://github.com/Noah-Grimaldi/keywordSEO/releases/tag/v1.0).
 
+**ISSUE(S)** - If you have more than two tabs open on Chrome, pytrends gets flagged by a Google 429 error. If possible, keep only two tabs open on Chrome while using keywordSEO.
+
 **IMPORTANT** - After clicking the SUBMIT button the program may take a couple seconds to process the requests and display the keyword results. (pytrends) - If you want to use proxies as you are blocked due to Google rate limit:
 
 ```
