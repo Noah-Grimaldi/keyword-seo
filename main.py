@@ -2,6 +2,7 @@ import requests
 from pytrends.request import TrendReq
 import PySimpleGUI as sg
 from string import ascii_lowercase
+import re
 
 sg.theme('Dark Black')
 
@@ -62,52 +63,40 @@ while True:
         pytrends = TrendReq(hl='en-US', tz=360)
         kw_list = [key_query]
         pytrends.build_payload(kw_list)
-        related_queries = pytrends.related_queries()
+
+        try:
+            related_queries = pytrends.related_queries()
+        except:
+            related_queries = ['nothing']
+
         top = list(related_queries.values())[0]['top']
         window['-RESULTS1-'].update('LSI KEYWORDS:\n\n')
         window['-RESULTS1-'].update(top, append=True)
         window['-RESULTS1-'].update('\n\nPLACE THESE:\n\nIn several places anywhere along your webpage', append=True)
 
         key_query = key_query.strip().replace(' ', '%20')
+
+        # cache Long-Tail keywords
         for i in ascii_lowercase:
             response2 = requests.get(
                 f"https://suggestqueries.google.com/complete/search?jsonp=jQuery22402686540572534406_040466655432741216&q={key_query}%20{i}&client=chrome&_=0005610362715791517")
             response_text2 = response2.text
 
-            for x in range(48, len(response_text2)):
-                if response_text2[x] == ']':
-                    response_text2 = response_text2[48:x + 1]
-                    break
-            for x in range(len(response_text2)):
-                if response_text2[x] == '[':
-                    new_text2 = response_text2[x:len(response_text2)]
-                    new_text2 = new_text2.replace('"', "")
-                    new_text2 = new_text2.replace("[", "")
-                    new_text2 = new_text2.replace("]", "")
-                    new_text2 = new_text2.split(',')
-                    break
-            additional_queries[i] = new_text2
+            # convert response string to list
+            res_arr2 = re.sub('[\"\[\]]', "", response_text2).split(',')[1:16]
+            
+            additional_queries[i] = res_arr2
 
+        # get initial query
         response = requests.get(
             f"https://suggestqueries.google.com/complete/search?jsonp=jQuery22402686540572534406_040466655432741216&q={key_query}&client=chrome&_=0005610362715791517")
 
         response_text = response.text
 
-        for x in range(48, len(response_text)):
-            if response_text[x] == ']':
-                response_text = response_text[48:x + 1]
-                break
+        # convert response string to list
+        res_arr = re.sub('[\"\[\]]', "", response_text).split(',')[1:16]
 
-        for x in range(len(response_text)):
-            if response_text[x] == '[':
-                new_text = response_text[x:len(response_text)]
-                new_text = new_text.replace('"', "")
-                new_text = new_text.replace("[", "")
-                new_text = new_text.replace("]", "")
-                new_text = new_text.split(',')
-                break
-
-        window['-RESULTS-'].update('LONG-TAIL KEYWORDS: \n\n' + ', '.join(new_text) + '\n\nPLACE THESE:\n\nIn a <title> tag\nIn the first 100 words\nIn an image alt text\nIn an <h1> tag\nIn an <h2> or <h3> tag\nIn the last 100 words of your page!')
+        window['-RESULTS-'].update('LONG-TAIL KEYWORDS: \n\n' + ', '.join(res_arr) + '\n\nPLACE THESE:\n\nIn a <title> tag\nIn the first 100 words\nIn an image alt text\nIn an <h1> tag\nIn an <h2> or <h3> tag\nIn the last 100 words of your page!')
 
     if event == '-MORE2-':
 
