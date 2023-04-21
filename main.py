@@ -78,6 +78,8 @@ while True:
 
         # cache Long-Tail keywords
         for i in ascii_lowercase:
+
+            #TODO - make these async
             response2 = requests.get(
                 f"https://suggestqueries.google.com/complete/search?jsonp=jQuery22402686540572534406_040466655432741216&q={key_query}%20{i}&client=chrome&_=0005610362715791517")
             response_text2 = response2.text
