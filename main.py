@@ -88,25 +88,26 @@ while True:
                     break
             additional_queries[i] = new_text2
 
-            response = requests.get(
-                f"https://suggestqueries.google.com/complete/search?jsonp=jQuery22402686540572534406_040466655432741216&q={key_query}&client=chrome&_=0005610362715791517")
-            response_text = response.text
+        response = requests.get(
+            f"https://suggestqueries.google.com/complete/search?jsonp=jQuery22402686540572534406_040466655432741216&q={key_query}&client=chrome&_=0005610362715791517")
 
-            for x in range(48, len(response_text)):
-                if response_text[x] == ']':
-                    response_text = response_text[48:x + 1]
-                    break
+        response_text = response.text
 
-            for x in range(len(response_text)):
-                if response_text[x] == '[':
-                    new_text = response_text[x:len(response_text)]
-                    new_text = new_text.replace('"', "")
-                    new_text = new_text.replace("[", "")
-                    new_text = new_text.replace("]", "")
-                    new_text = new_text.split(',')
-                    break
+        for x in range(48, len(response_text)):
+            if response_text[x] == ']':
+                response_text = response_text[48:x + 1]
+                break
 
-            window['-RESULTS-'].update('LONG-TAIL KEYWORDS: \n\n' + ', '.join(new_text) + '\n\nPLACE THESE:\n\nIn a <title> tag\nIn the first 100 words\nIn an image alt text\nIn an <h1> tag\nIn an <h2> or <h3> tag\nIn the last 100 words of your page!')
+        for x in range(len(response_text)):
+            if response_text[x] == '[':
+                new_text = response_text[x:len(response_text)]
+                new_text = new_text.replace('"', "")
+                new_text = new_text.replace("[", "")
+                new_text = new_text.replace("]", "")
+                new_text = new_text.split(',')
+                break
+
+        window['-RESULTS-'].update('LONG-TAIL KEYWORDS: \n\n' + ', '.join(new_text) + '\n\nPLACE THESE:\n\nIn a <title> tag\nIn the first 100 words\nIn an image alt text\nIn an <h1> tag\nIn an <h2> or <h3> tag\nIn the last 100 words of your page!')
 
     if event == '-MORE2-':
 
