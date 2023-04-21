@@ -83,8 +83,9 @@ while True:
             response_text2 = response2.text
 
             # convert response string to list
-            res_arr2 = re.sub('[\"\[\]]', "", response_text2).split(',')[1:16]
-            
+            res_arr2 = re.sub('[\"\[\]]', "", response_text2).split(',')
+            res_arr2 = res_arr2[1:res_arr2.index('') if '' in res_arr2 else 16]
+
             additional_queries[i] = res_arr2
 
         # get initial query
@@ -94,7 +95,8 @@ while True:
         response_text = response.text
 
         # convert response string to list
-        res_arr = re.sub('[\"\[\]]', "", response_text).split(',')[1:16]
+        res_arr = re.sub('[\"\[\]]', "", response_text).split(',')
+        res_arr = res_arr[1:res_arr.index('') if '' in res_arr else 16]
 
         window['-RESULTS-'].update('LONG-TAIL KEYWORDS: \n\n' + ', '.join(res_arr) + '\n\nPLACE THESE:\n\nIn a <title> tag\nIn the first 100 words\nIn an image alt text\nIn an <h1> tag\nIn an <h2> or <h3> tag\nIn the last 100 words of your page!')
 
